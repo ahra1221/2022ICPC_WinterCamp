@@ -1,48 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int func(char c){
+    if(c>='a' && c<='z') return (c-'a');
+    if(c>='A' && c<='Z') return (c-'A');
+    return -1;
+}
+
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int n;
     cin >> n;
-    string arr[51];
-    int alphabet[27] = {1, };
-    int flag = 1;
-    for(int i=0;i<n;i++){
+    cin.ignore(1);
+
+    while(n--){
         string s;
         getline(cin, s);
-        arr[i] = s;
-    }
-    for(int i=0;i<n;i++){
-        string tmp = arr[i];
-        for(int j=0;j<tmp.length();j++){
-            if(tmp[j] >= 'A' && tmp[j] <= 'Z'){ //대문자
-                alphabet[tmp[j] - 'A'] = 0;
-            }
-            else if(tmp[j] >= 'a' && tmp[j] <= 'z'){//소문자
-                alphabet[tmp[j] - 'a'] = 0;
-            }
-            else{
-                continue;
-            }
-        }
-        for(int j=0;j<27;j++){
-            if(tmp[j]){ continue;}
-            else{
-                flag = 0;
-                break;
-            }
-        }
-        if(flag){ cout << "pangram";}
-        else{
-            cout <<"missing ";
-            for(int j=0;j<27;j++){
-                if(!tmp[j]) cout << to_string(tmp[j]+'a');
-            }
-        }
-    }
+        bitset<26> bs;
 
+        for(char c : s){
+            int nc = func(c);
+            if(nc != -1) bs[nc] = 1;
+        }
+
+        if(bs.all()) cout << "pangram\n";
+        else{
+            cout << "missing ";
+            for(int i=0;i<26;i++){
+                if (!bs[i]) cout << (char)(i + 'a');
+            }
+            cout << "\n";
+        }
+    }
     return 0;
 }
